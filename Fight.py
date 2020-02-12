@@ -30,11 +30,12 @@ class Fight:
     Outcome = ""
     Weightclass = ""
     Location = ""
+    Rounds = 0
 
-    class __init__(self):
+    def __init__(self):
         pass
 
-    class __init__(self, fight_info):
+    def __init__(self, fight_info):
         self.Red_Corner = fight_info[0]
         self.Blue_Corner = fight_info[1]
         self.R_Knockdowns = fight_info[2]
@@ -64,6 +65,7 @@ class Fight:
         self.Outcome = fight_info[26]
         self.Weightclass = fight_info[27]
         self.Location = fight_info[28]
+        self.Rounds = fight_info[29]
 
     def save(self, db_conn):
         sql = '''INSERT INTO Fights (Red_Corner, Blue_Corner, R_Knockdowns,
@@ -73,18 +75,33 @@ class Fight:
                 B_Knockdowns, B_Sig_Str_Landed, B_Sig_Str_Attempted,
                 B_Total_Str_Landed, B_Total_Str_Attempted, B_Takedowns_Landed,
                 B_Takedowns_Attempted, B_Submissions_Attempted, B_Passes, B_Reversals,
-                Ref, Date, FightCard, Winner, Outcome, Weightclass, Location)
+                Ref, Date, FightCard, Winner, Outcome, Weightclass, Location, Rounds)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
 
-                db_conn.execute(sql, (self.Red_Corner, self.Blue_Corner,
-                    self.R_Knockdowns, self.R_Sig_Str_Landed, self.R_Sig_Str_Attempted,
-                    self.R_Total_Str_Landed, self.R_Total_Str_Attempted,
-                    self.R_Takedowns_Landed, self.R_Takedowns_Attempted,
-                    self.R_Submissions_Attempted, self.R_Passes, self.R_Reversals,
-                    self.B_Knockdowns, self.B_Sig_Str_Landed, self.B_Sig_Str_Attempted,
-                    self.B_Total_Str_Landed, self.B_Total_Str_Attempted,
-                    self.B_Takedowns_Landed, self.B_Takedowns_Attempted,
-                    self.B_Submissions_Attempted, self.B_Passes, self.B_Reversals,
-                    self.Ref, self.Date, self.FightCard, self.Winner,
-                    self.Outcome, self.Weightclass, self.Location))
+        db_conn.execute(sql, (self.Red_Corner, self.Blue_Corner,
+            self.R_Knockdowns, self.R_Sig_Str_Landed, self.R_Sig_Str_Attempted,
+            self.R_Total_Str_Landed, self.R_Total_Str_Attempted,
+            self.R_Takedowns_Landed, self.R_Takedowns_Attempted,
+            self.R_Submissions_Attempted, self.R_Passes, self.R_Reversals,
+            self.B_Knockdowns, self.B_Sig_Str_Landed, self.B_Sig_Str_Attempted,
+            self.B_Total_Str_Landed, self.B_Total_Str_Attempted,
+            self.B_Takedowns_Landed, self.B_Takedowns_Attempted,
+            self.B_Submissions_Attempted, self.B_Passes, self.B_Reversals,
+            self.Ref, self.Date, self.FightCard, self.Winner,
+            self.Outcome, self.Weightclass, self.Location, self.Rounds))
+
+if __name__ == '__main__':
+    # For Debug Purposes Only
+    conn = sqlite3.connect('MMA.db')
+    db_conn = conn.cursor()
+
+    test_stats = [1, 2, 0, 104, 166, 107, 170, 2, 9, 0, 0, 0,
+                    0, 116, 259, 119, 263, 0, 0, 0, 0, 0,
+                    'Dan Miragliotta', 'February 08, 2020', 
+                    'UFC 247: Jones vs. Reyes', 1, 'U-Dec',
+                    'Light Heavyweight', 'Houston, Texas, USA', 5]
+
+    this_fight = Fight(test_stats)
+    this_fight.save(db_conn)
+    conn.commit()

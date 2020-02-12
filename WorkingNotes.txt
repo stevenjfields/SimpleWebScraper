@@ -1,0 +1,14 @@
+
+Fight.py:
+ -- edit to not include any striking stats, can sum from rounds
+
+ Round.py:
+ -- edit to include all stats, all stats are listed
+    but not all are included in save() method.
+
+CreateDatabase.py:
+ -- edit Fight table to not include striking stats
+
+Still need to create actual webscraper. Can salvage bits of code
+from Fighter.py and FightDetails.py. Will need to refactor though,
+pretty messy code.
