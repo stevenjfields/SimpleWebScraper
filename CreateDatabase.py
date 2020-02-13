@@ -16,14 +16,6 @@ def CreateDB():
     db.execute('''CREATE TABLE Fights
                 (FightID INTEGER PRIMARY KEY AUTOINCREMENT, 
                 Red_Corner int NOT NULL, Blue_Corner int NOT NULL,
-                R_Knockdowns tinyint, R_Sig_Str_Landed smallint, R_Sig_Str_Attempted smallint,
-                R_Total_Str_Landed smallint, R_Total_Str_Attempted smallint,
-                R_Takedowns_Landed tinyint, R_Takedowns_Attempted tinyint,
-                R_Submissions_Attempted tinyint, R_Passes tinyint, R_Reversals tinyint,
-                B_Knockdowns tinyint, B_Sig_Str_Landed smallint, B_Sig_Str_Attempted smallint,
-                B_Total_Str_Landed smallint, B_Total_Str_Attempted smallint,
-                B_Takedowns_Landed tinyint, B_Takedowns_Attempted tinyint,
-                B_Submissions_Attempted tinyint, B_Passes tinyint, B_Reversals tinyint,
                 Ref text, Date text, FightCard text, Winner int, Outcome text,
                 Weightclass text, Location text, Rounds tinyint,
                 FOREIGN KEY (Red_Corner) REFERENCES Fighters(FighterID),
@@ -59,3 +51,13 @@ def CreateDB():
 
 if __name__ == '__main__':
     CreateDB()
+
+    # SELECT Fights.FightCard, f1.Name Red_Corner, SUM(rounds.R_Sig_Str_Landed), f2.Name Blue_Corner, SUM(rounds.B_Sig_Str_Landed)
+    # FROM Fights
+    # LEFT JOIN Fighters f1 on (Fights.Red_Corner=f1.FighterID)
+    # LEFT JOIN Fighters f2 on (Fights.Blue_Corner=f2.FighterID)
+    # LEFT JOIN Round rounds ON (Fights.FightID=Round.FightID)
+
+    # Select SUM(R_Sig_Str_Landed)
+    # From Round
+    # where Round.FightID = 1
