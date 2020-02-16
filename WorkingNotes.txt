@@ -1,3 +1,10 @@
 Still need to create actual webscraper. Can salvage bits of code
 from Fighter.py and FightDetails.py. Will need to refactor though,
 pretty messy code.
+
+improve error handling
+
+Find a way to speed the process up, takes awfully long. Parallelizing
+the code wasn't working.
+
+Scraper for fight data and round data, will be done in one script.
