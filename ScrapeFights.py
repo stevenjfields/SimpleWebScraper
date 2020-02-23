@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from Fight import Fight
 
 # Go through each fight card, retieving some data and passing it on.
 def ScrapeFightCards(conn):
@@ -34,11 +35,42 @@ def ScrapeFights(conn, url, date, fight_card, location):
 
 # Create a record of each fight, passing data on for the rounds.
 def ScrapeFight(conn, url, date, fight_card, location, winner):
-    pass
+    response = requests.get(url)
+    content = BeautifulSoup(response.content, 'html.parser')
 
-# Create round by round entries for the fight that calls this method.
-def ScrapeRounds(url):
-    pass
+    #Scrape Fight
+    names = content.find_all('h3', attrs={'class':'b-fight-details__person-name'})
+    for i in range(0, len(names)):
+        names[i] = names[i].text.lstrip().rstrip()
+
+    db_conn = conn.cursor()
+
+    print(names)
+
+    #Scrape Rounds    
+    lists = []    
+    tables = content.find_all('table')
+    for table in tables:
+        bodies = table.find_all('tbody')
+        for body in bodies:
+            rows = body.find_all('tr')
+            for row in rows:
+                list1 = []
+                list2 = []
+                stats = row.find_all('td', attrs={'class':'b-fight-details__table-col'})
+                for stat in stats:
+                    values = stat.find_all('p')
+                    for i in range(0, len(values)):
+                        values[i] = values[i].text.lstrip().rstrip()
+                        if ' of ' in values[i]:
+                            values[i] = values[i].split(' of ')
+                    list1.append(values[0])
+                    list2.append(values[1])
+                lists.append(list1)
+                lists.append(list2)
+
+    for this_list in lists:
+        print(this_list)
 
 if __name__ == '__main__':
     import sqlite3
